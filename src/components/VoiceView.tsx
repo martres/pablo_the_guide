@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { VoiceRecognitionService } from '../services/VoiceRecognitionService';
@@ -9,24 +9,33 @@ interface VoiceViewProps {
 
 export const VoiceView: React.FC<VoiceViewProps> = ({ isActive }) => {
   const [text, setText] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const voiceService = VoiceRecognitionService.getInstance();
+
+  const handleVoiceResult = useCallback((result: string) => {
+    setText(result);
+    setError(null);
+  }, []);
 
   useEffect(() => {
     let mounted = true;
 
     const handleVoice = async () => {
-      if (isActive) {
-        try {
+      try {
+        if (isActive) {
           await voiceService.startListening((newText) => {
             if (mounted) {
-              setText(newText);
+              handleVoiceResult(newText);
             }
           });
-        } catch (error) {
-          console.error('Voice recognition error:', error);
+        } else {
+          await voiceService.stopListening();
         }
-      } else {
-        await voiceService.stopListening();
+      } catch (error) {
+        if (mounted) {
+          console.error('Voice recognition error:', error);
+          setError('Une erreur est survenue avec la reconnaissance vocale');
+        }
       }
     };
 
@@ -34,9 +43,9 @@ export const VoiceView: React.FC<VoiceViewProps> = ({ isActive }) => {
 
     return () => {
       mounted = false;
-      voiceService.stopListening();
+      voiceService.stopListening().catch(console.error);
     };
-  }, [isActive]);
+  }, [isActive, handleVoiceResult]);
 
   return (
     <View style={styles.container}>
@@ -44,13 +53,19 @@ export const VoiceView: React.FC<VoiceViewProps> = ({ isActive }) => {
         <MaterialIcons 
           name={isActive ? "mic" : "mic-none"} 
           size={20} 
-          color="#3B82F6" 
+          color={error ? "#EF4444" : "#3B82F6"} 
         />
-        <Text style={styles.title}>Voice Input</Text>
+        <Text style={[styles.title, error && styles.errorTitle]}>
+          {error ? 'Erreur' : 'Entrée Vocale'}
+        </Text>
       </View>
-      <Text style={styles.transcription}>
-        {text || (isActive ? 'Listening...' : 'Voice recognition stopped')}
-      </Text>
+      {error ? (
+        <Text style={styles.errorText}>{error}</Text>
+      ) : (
+        <Text style={styles.transcription}>
+          {text || (isActive ? 'Écoute en cours...' : 'Reconnaissance vocale arrêtée')}
+        </Text>
+      )}
     </View>
   );
 };
@@ -74,9 +89,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#3B82F6',
   },
+  errorTitle: {
+    color: '#EF4444',
+  },
   transcription: {
     fontSize: 16,
     color: '#1E40AF',
+    fontWeight: '500',
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#EF4444',
     fontWeight: '500',
   },
 }); 
