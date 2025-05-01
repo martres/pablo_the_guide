@@ -60,14 +60,7 @@
     },
     "plugins": [
       "expo-location",
-      "expo-av",
-      [
-        "@react-native-voice/voice",
-        {
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-          "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access speech recognition"
-        }
-      ]
+      "expo-av"
     ]
   }
 }
