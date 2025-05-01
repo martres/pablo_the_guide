@@ -1,0 +1,117 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+🔍 V1 - Spécification Complète de l’App Touristique Interactive
+
+🔬 Concept
+
+Une application mobile (React Native) affichant une carte en temps réel avec des points d’intérêt (POIs). L’utilisateur peut :
+
+Cliquer sur un POI pour entendre une description audio générée par GPT + TTS OpenAI.
+
+Voir et cliquer sur des suggestions de "follow-up questions".
+
+Optionnellement, poser une question à voix haute via le micro (flux vocal ponctuel, pas de streaming continu).
+
+Objectif : V1 simple, fluide, sans WebSocket ou STT continu.
+
+🚀 Fonctionnalités Principales
+
+1. 🌍 Carte interactive
+
+Affichage des POIs autour de la position GPS de l'utilisateur
+
+Pins interactifs avec nom et bouton "écouter le guide"
+
+2. 🎧 Narration AI
+
+Quand l'utilisateur clique sur un POI, l’app :
+
+Envoie l'ID du POI + lat/lon au backend
+
+Le backend récupère infos (GMaps + Wiki) + génère une narration GPT + TTS
+
+Retourne : URL audio, texte, 3–5 follow-up questions
+
+3. 🤔 Follow-Up Questions
+
+Questions suggérées par l'agent
+
+Clic = relance du cycle (avec historique si nécessaire)
+
+Dernier bouton = "Parler"
+
+4. 🎤 Question vocale ponctuelle
+
+L'utilisateur clique sur "Parler"
+
+L’app enregistre un court audio (5–10s)
+
+Envoi à /voice-query
+
+Backend : transcription (Whisper), enrichissement POI, GPT, TTS
+
+Renvoie audio + nouveaux follow-ups
+
+🚧 Backend Node.js/TypeScript
+
+Endpoints
+
+Route
+
+Description
+
+GET /poi
+
+Retourne les POIs autour d'une position
+
+POST /narrate
+
+Génère narration + follow-ups pour un POI
+
+POST /voice-query
+
+Reçoit un audio + position, renvoie audio + follow-ups
+
+Services
+
+GPT-4 (chat completions) avec prompt contextuel (POI, localisation)
+
+TTS OpenAI tts-1, voix Nova (MP3 statique ou streamable)
+
+Whisper pour transcription
+
+Google Maps + Wikipedia GeoSearch pour la data POI
+
+🚌 Client Mobile (React Native)
+
+Carte (react-native-maps)
+
+Audio player (expo-av ou autre)
+
+Enregistrement vocal local
+
+Affichage de follow-ups + bouton "Parler"
+
+✅ Avantages de cette V1
+
+Pas de WebSocket, pas de STT temps réel
+
+Simple, testable, scalable
+
+UX fluide et immersive
+
+Base parfaite pour une V2 plus vivante
+
+🔪 Etapes Suivantes
+
+Créer /poi (avec Google + Wiki)
+Implémenter /narrate avec GPT + TTS
+
+Ajouter /voice-query avec Whisper
+
+Côté client : carte, audio player, interface follow-up
+
+Tester avec un quartier (ex: Île de la Cité, Paris)

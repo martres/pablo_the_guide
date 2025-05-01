@@ -1,0 +1,71 @@
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# macOS
+.DS_Store
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+*.iml
+*.hprof
+android/.idea/
+
+# iOS
+ios/Pods/
+ios/DerivedData/
+ios/build/
+ios/*.xcodeproj/project.xcworkspace/xcuserdata
+ios/*.xcodeproj/xcuserdata
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+ios/*.xcworkspace/xcuserdata/
+ios/*.xcodeproj/xcuserdata/
+
+# Expo
+.expo/
+.expo-shared/
+
+# Bundler / cache / output
+babel.config.js
+metro.config.js
+package-lock.json
+yarn.lock
+npm-shrinkwrap.json
+*.swp
+*.swo
+
+# Build output
+dist/
+build/
+tmp/
+temp/
+
+# TypeScript
+*.tsbuildinfo
+
+# VSCode
+.vscode/
+
+# EAS
+*.tar.gz
+*.keystore
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+*.entitlements
+*.xcarchive
+
+# Env files (⚠️ secrets)
+.env
+.env.*

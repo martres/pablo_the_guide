@@ -1,0 +1,13 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+SwiftUI only iOS 17 minimun, Respecte la structure du project quand tu crée des fichiers, Features/
+Swift6 également donc focus await async et surtout vérifie bien les warnings si tu penses en voir,  fait toujours les commentaire en anglais, l'app est une app de respiration de médiation
+
+
+Frero on utilise @State avec @Observable ... fait attention à la doc de swift6
+
+Je veux que tu me réponds toujours des petits changement que tu réflechisses à 2 fois. 
+Je valide et on continue, je suis ton architecte
